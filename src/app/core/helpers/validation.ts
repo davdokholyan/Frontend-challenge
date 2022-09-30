@@ -6,7 +6,9 @@ export class Validation {
        'maxlength': `Maximum length ` + (validatorValue ? validatorValue.requiredLength : ''),
        'patternfirstname': 'Invalid Firstname format',
        'patternlastname': 'Invalid Lastname format',
-       'patternemail': 'Invalid email format'
+       'patternemail': 'Invalid email format',
+       'emailExists': 'Email address already exists',
+       'notFound': 'Email address or password is incorrect',
     };
 
     return config[validatorName];

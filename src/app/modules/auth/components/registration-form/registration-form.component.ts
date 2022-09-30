@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
-import { AuthService } from 'src/app/services/auth.service';
-import { RegexValidator } from '../../../../shered/constants/regex-validators';
-import { AddUser } from '../../actions/registration.action';
+import { HttpErrorResponse } from "@angular/common/http";
+
+import { Observable } from 'rxjs';
+
+import { Select, Store } from '@ngxs/store';
+import { AddUser } from "@core/actions/authentication.action";
+import { AuthenticationState } from '@core/store/authentication.state';
+
+import { RegexValidator } from '@shared/constants/regex-validators';
+import { StatusCode } from "@shared/constants/status-code";
+
 
 @Component({
   selector: 'app-registration-form',
@@ -12,6 +18,9 @@ import { AddUser } from '../../actions/registration.action';
   styleUrls: ['./registration-form.component.scss']
 })
 export class RegistrationFormComponent {
+  @Select(AuthenticationState.loading)
+  loading$: Observable<AuthenticationState>;
+
   registrationForm: FormGroup = new FormGroup({
     firstname: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24), Validators.pattern((RegexValidator.name))]),
     lastname: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24), Validators.pattern((RegexValidator.name))]),
@@ -20,21 +29,23 @@ export class RegistrationFormComponent {
   });
 
   constructor(
-    private store: Store,
-    public authService: AuthService
+    private store: Store
   ) { }
 
   signUp(): void {
     if (this.registrationForm.valid) {
       const user = { id: Date.now(), ...this.registrationForm.getRawValue() };
       this.store
-        .dispatch(new AddUser({ user }))
-      this.registrationForm.reset();
+        .dispatch(new AddUser({ user })).subscribe({
+          next: () => this.registrationForm.reset(),
+          error: err => this.errorHandle(err)
+        })
     }
   }
 
-  signIn(): void {
-    this.authService.isExistEmail(false);
-    this.store.dispatch(new Navigate(['/auth', 'login']))
+  private errorHandle(error: HttpErrorResponse): void {
+    if (error.message === StatusCode.EMAIL_MUST_BE_UNIQUE) {
+      this.registrationForm.get('email').setErrors({ emailExists: true });
+    }
   }
 }

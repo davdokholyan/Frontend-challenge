@@ -1,4 +1,4 @@
-<nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+<nav class="flex items-center justify-between flex-wrap bg-teal-500 p-6" *ngIf="{isAuth: userToken$ | async} as data">
   <div class="flex items-center flex-shrink-0 text-white mr-6">
     <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54"
       xmlns="http://www.w3.org/2000/svg">
@@ -7,7 +7,7 @@
       </svg>
     <span class="font-semibold text-xl tracking-tight">Frontend challenge</span>
   </div>
-  <div class="block md:hidden" *ngIf="authService.isAuth$ | async">
+  <div class="block md:hidden" *ngIf="data.isAuth">
     <button
     (click)="showMenu = !this.showMenu"
       class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
@@ -19,7 +19,7 @@
   </div>
   <div [ngClass]="{'hidden': !showMenu, 'flex flex-col': showMenu }"
     class="w-full block flex-grow md:flex md:items-center md:w-auto">
-    <div class="text-sm md:flex-grow" *ngIf="authService.isAuth$ | async">
+    <div class="text-sm md:flex-grow" *ngIf="data.isAuth">
       <a [routerLink]="['/about-task']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="block mt-4 md:inline-block md:mt-0 text-teal-200 hover:text-white mr-4">
         About Task
       </a>
@@ -29,7 +29,7 @@
     </div>
     <div>
       <button
-        *ngIf="authService.isAuth$ | async"
+      *ngIf="data.isAuth"
       (click)="logOut()"
         class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 md:mt-0">Log
         Out</button>

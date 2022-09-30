@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { Validation } from 'src/app/helpers/validation';
+
+import { Validation } from '@core/helpers/validation';
 
 @Component({
    selector: 'err-msg',

@@ -18,12 +18,12 @@
         [withPatternControlName]="'lastname'">
       </err-msg>
     </div>
-    <div class="mb-6 form-group">
+    <div class="mb-6 form-group" *ngIf="registrationForm.get('email'); let emailControl">
       <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
         Email
       </label>
       <input class="form-control" formControlName="email" id="email" type="email" placeholder="Email" />
-      <err-msg class="error-message" [control]="registrationForm.controls['email']" [withPatternControlName]="'email'">
+      <err-msg class="error-message" [control]="emailControl" [withPatternControlName]="'email'">
       </err-msg>
     </div>
     <div class="mb-6 form-group">
@@ -35,16 +35,15 @@
         [withPatternControlName]="'password'">
       </err-msg>
     </div>
-    <p class="text-red-500 text-xs italic mb-3" *ngIf="authService.isExistEmail$ | async">Email address already exists.
-    </p>
     <div class="flex items-center justify-between">
-      <button (click)="signUp()" [disabled]="registrationForm.invalid"
+      <button (click)="signUp()" [disabled]="registrationForm.invalid || (loading$ | async)"
         [ngClass]="{'opacity-50 cursor-not-allowed': registrationForm.invalid}"
         class="bg-teal-600  text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         type="button">
         Sign Up
       </button>
-      <a (click)="signIn()" class="inline-block align-baseline underline text-sm text-teal-500 hover:text-teal-700">
+      <a [routerLink]="['/auth', 'login']"
+        class="inline-block align-baseline underline text-sm text-teal-500 hover:text-teal-700">
         Sign In
       </a>
     </div>

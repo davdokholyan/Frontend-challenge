@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './guards/auth.guard';
-import { NotFoundComponent } from './shered/components/index';
+
+import { AuthGuard } from './core/guards/auth.guard';
+
+import { NotFoundComponent } from './shared/components/index';
 
 const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },

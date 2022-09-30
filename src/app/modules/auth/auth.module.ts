@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgxsModule } from '@ngxs/store';
 
 import { AuthRoutingModule } from './auth-routing.module';
-import { ErrorMsgComponent } from 'src/app/shered/components';
+import { ErrorMsgComponent } from 'src/app/shared/components';
 import { LoginFormComponent, RegistrationFormComponent } from './components';
-import { RegistrationState } from './store/registration.state';
 
 @NgModule({
   declarations: [
@@ -17,8 +15,7 @@ import { RegistrationState } from './store/registration.state';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    AuthRoutingModule,
-    NgxsModule.forFeature([RegistrationState])
+    AuthRoutingModule
   ]
 })
 export class AuthModule { }
