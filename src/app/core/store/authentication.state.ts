@@ -88,7 +88,7 @@ export class AuthenticationState {
             draft.user = null;
           })
         );
-        this.store.dispatch(new Navigate(['/auth', 'login']));
+        this.store.dispatch(new Navigate(['/auth', 'login'], { sortBy: null }));
       }),
       finalize(() => dispatch(new AuthenticationActions.StopLoading()))
     );
