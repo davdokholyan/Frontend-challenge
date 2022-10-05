@@ -9,12 +9,15 @@ import { Navigate } from "@ngxs/router-plugin";
 import * as AuthenticationActions from "../actions/authentication.action";
 
 import { IUser } from "../../shared/interfaces/IUser";
+import { ITodo } from "@shared/interfaces/ITodo";
+import { SortType } from "@shared/constants/sortType";
 
 
 export class AuthStateModel {
   userToken: string;
   authUsers: IUser[];
   user: IUser;
+  sortBy: SortType;
   loading: boolean;
 }
 
@@ -22,6 +25,7 @@ const defaults: AuthStateModel = {
   userToken: null,
   authUsers: [],
   user: null,
+  sortBy: SortType.A_Z_DATE,
   loading: false
 };
 
@@ -46,6 +50,11 @@ export class AuthenticationState {
     return !!userToken;
   }
 
+  @Selector()
+  static todoList({ user }: AuthStateModel): ITodo[] {
+    return user.todoList
+  }
+
   @Action(AuthenticationActions.StartLoading)
   startLoading(ctx: StateContext<AuthStateModel>) {
     return ctx.patchState({ loading: true });
@@ -64,7 +73,19 @@ export class AuthenticationState {
       tap(() => {
         setState(
           produce(getState(), draft => {
+            draft.authUsers.map(user => {
+              if (user.id === draft.user.id) {
+                user.id = draft.user.id;
+                user.email = draft.user.email;
+                user.password = draft.user.password;
+                user.firstname = draft.user.firstname;
+                user.lastname = draft.user.lastname;
+                user.todoList = draft.user.todoList;
+              }
+            })
+
             draft.userToken = null;
+            draft.user = null;
           })
         );
         this.store.dispatch(new Navigate(['/auth', 'login']));
@@ -89,7 +110,9 @@ export class AuthenticationState {
           setState(
             produce(getState(), draft => {
               draft.userToken = payload.user.id;
+              draft.user = { todoList: [], ...payload.user };
               draft.authUsers.push(payload.user);
+              this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }))
             })
           );
         }
@@ -115,6 +138,7 @@ export class AuthenticationState {
           setState(
             produce(getState(), draft => {
               draft.userToken = existUser.id;
+              draft.user = { todoList: [], ...existUser };
             })
           );
         } else {
@@ -124,5 +148,106 @@ export class AuthenticationState {
       }),
       finalize(() => dispatch(new AuthenticationActions.StopLoading()))
     );
+  }
+
+  @Action(AuthenticationActions.AddTodo)
+  addTodo(
+    { getState, setState, dispatch }: StateContext<AuthStateModel>,
+    { payload }: AuthenticationActions.AddTodo
+  ) {
+    return dispatch(new AuthenticationActions.StartLoading()).pipe(
+      tap(() => {
+        setState(
+          produce(getState(), draft => {
+            draft.user.todoList.push({ id: Date.now(), ...payload.todo });
+            this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }))
+          })
+        )
+      }),
+      finalize(() => dispatch(new AuthenticationActions.StopLoading()))
+    );
+  }
+
+  @Action(AuthenticationActions.EditTodo)
+  editTodo(
+    { getState, setState, dispatch }: StateContext<AuthStateModel>,
+    { payload }: AuthenticationActions.EditTodo
+  ) {
+    return dispatch(new AuthenticationActions.StartLoading()).pipe(
+      tap(() => {
+        setState(
+          produce(getState(), draft => {
+            draft.user.todoList.map(item => {
+              if (item.id === payload.id) {
+                item.title = payload.todo.title;
+                item.description = payload.todo.description;
+              }
+            });
+            this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }))
+          })
+        )
+      }),
+      finalize(() => dispatch(new AuthenticationActions.StopLoading()))
+    );
+  }
+
+  @Action(AuthenticationActions.ComplateTodo)
+  complateTodo(
+    { getState, setState, dispatch }: StateContext<AuthStateModel>,
+    { payload }: AuthenticationActions.ComplateTodo
+  ) {
+    return dispatch(new AuthenticationActions.StartLoading()).pipe(
+      tap(() => {
+        setState(
+          produce(getState(), draft => {
+            draft.user.todoList.find(item => item.id === payload.id).complated = true;
+          })
+        )
+      }),
+      finalize(() => dispatch(new AuthenticationActions.StopLoading()))
+    );
+  }
+
+  @Action(AuthenticationActions.RemoveTodo)
+  removeTodo(
+    { getState, setState, dispatch }: StateContext<AuthStateModel>,
+    { payload }: AuthenticationActions.RemoveTodo
+  ) {
+    return dispatch(new AuthenticationActions.StartLoading()).pipe(
+      tap(() => {
+        setState(
+          produce(getState(), draft => {
+            draft.user.todoList = draft.user.todoList.filter(todo => todo.id !== payload.id);
+          })
+        )
+      }),
+      finalize(() => dispatch(new AuthenticationActions.StopLoading()))
+    );
+  }
+
+  @Action(AuthenticationActions.SortingBy)
+  sortingBy(
+    { getState, setState }: StateContext<AuthStateModel>,
+    { payload }: AuthenticationActions.SortingBy
+  ) {
+    return setState(
+      produce(getState(), draft => {
+        draft.sortBy = payload.sortBy;
+        switch (payload.sortBy) {
+          case SortType.A_Z_NAME:
+            draft.user.todoList = draft.user.todoList.sort((a, b) => a.title > b.title ? 1 : -1);
+            break;
+          case SortType.Z_A_NAME:
+            draft.user.todoList = draft.user.todoList.sort((a, b) => a.title < b.title ? 1 : -1);
+            break;
+          case SortType.A_Z_DATE:
+            draft.user.todoList = draft.user.todoList.sort((a, b) => a.date < b.date ? 1 : -1);
+            break;
+          case SortType.Z_A_DATE:
+            draft.user.todoList = draft.user.todoList.sort((a, b) => a.date > b.date ? 1 : -1);
+            break;
+        }
+      })
+    )
   }
 }

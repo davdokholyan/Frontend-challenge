@@ -18,11 +18,11 @@ import { RegexValidator } from '@shared/constants/regex-validators';
 })
 export class LoginFormComponent {
   @Select(AuthenticationState.loading)
-  loading$: Observable<AuthenticationState>;
+  loading$: Observable<boolean>;
 
   loginForm: FormGroup = new FormGroup({
-    email: new FormControl(null, [Validators.required, Validators.pattern(RegexValidator.email)]),
-    password: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)])
+    email: new FormControl<string | null>(null, [Validators.required, Validators.pattern(RegexValidator.email)]),
+    password: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)])
   });
 
   constructor(
@@ -41,7 +41,7 @@ export class LoginFormComponent {
   }
 
   private errorHandle(error: HttpErrorResponse): void {
-    if (error.message === StatusCode.NOT_FOUND) {
+    if (error.message === StatusCode.USER_NOT_FOUND) {
       this.loginForm.get('password').setErrors({ notFound: true });
     }
   }

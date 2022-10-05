@@ -22,6 +22,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/about-task/about-task.module').then(m => m.AboutTaskModule)
   },
   {
+    path: 'todo',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./modules/todo/todo.module').then(m => m.TodoModule)
+  },
+  {
     path: '**',
     component: NotFoundComponent
   }

@@ -4,10 +4,10 @@
     position: relative;
     width: 100%;
     max-width: 500px;
- 
+
     .form-control {
        width: 100%;
-       height: 30px;
+       min-height: 30px;
        padding: 6px 10px 6px 15px;
        font-weight: normal;
        font-size: 12px;
@@ -19,21 +19,21 @@
        color: $colorDark;
        outline: none;
        transition: 300ms;
- 
+
        &::placeholder {
           color: #808080;
        }
- 
+
        &:focus {
           border-bottom: 1px solid $colorDark;
           transition: 300ms;
        }
- 
+
        &:hover {
           border-bottom: 1px solid $colorDark;
           transition: 300ms;
        }
- 
+
        &.ng-invalid.ng-touched {
           border-bottom: 1px solid $colorRubinate;
        }

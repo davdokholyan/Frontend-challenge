@@ -19,13 +19,13 @@ import { StatusCode } from "@shared/constants/status-code";
 })
 export class RegistrationFormComponent {
   @Select(AuthenticationState.loading)
-  loading$: Observable<AuthenticationState>;
+  loading$: Observable<boolean>;
 
   registrationForm: FormGroup = new FormGroup({
-    firstname: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24), Validators.pattern((RegexValidator.name))]),
-    lastname: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24), Validators.pattern((RegexValidator.name))]),
-    email: new FormControl(null, [Validators.required, Validators.pattern(RegexValidator.email)]),
-    password: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)])
+    firstname: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24), Validators.pattern((RegexValidator.name))]),
+    lastname: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24), Validators.pattern((RegexValidator.name))]),
+    email: new FormControl<string | null>(null, [Validators.required, Validators.pattern(RegexValidator.email)]),
+    password: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)])
   });
 
   constructor(

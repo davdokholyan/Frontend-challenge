@@ -1,0 +1,30 @@
+<ul nz-list [nzDataSource]="todoList" [nzNoResult]="'Don`t have a todos data'" nzBordered nzSize="large">
+  <nz-list-header class="flex justify-between">
+    <div class="font-bold">
+      Todo List
+    </div>
+    <div class="flex">
+      <nz-select [(ngModel)]="sortBy" (ngModelChange)="sortingBy.emit($event)">
+        <nz-option [nzValue]="sortType.A_Z_NAME" nzLabel="A-Z By Name"></nz-option>
+        <nz-option [nzValue]="sortType.Z_A_NAME" nzLabel="Z-A By Name"></nz-option>
+        <nz-option [nzValue]="sortType.A_Z_DATE" nzLabel="A-Z By Date"></nz-option>
+        <nz-option [nzValue]="sortType.Z_A_DATE" nzLabel="Z-A By Date"></nz-option>
+      </nz-select>
+    </div>
+  </nz-list-header>
+  <li nz-list-item *ngFor="let todo of todoList" nzNoFlex>
+    <ul nz-list-item-actions>
+      <nz-list-item-action>
+        <a (click)="editTodo.emit(todo)">Edit</a>
+      </nz-list-item-action>
+      <nz-list-item-action>
+        <a (click)="removeTodo.emit(todo.id)">Delete</a>
+      </nz-list-item-action>
+      <nz-list-item-action>
+        <a (click)="complateTodo.emit(todo.id)">Complate</a>
+      </nz-list-item-action>
+    </ul>
+    {{ todo.title }}
+    {{ todo.description }}
+  </li>
+</ul>

@@ -1,21 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 
+import { SharedModule } from "@shared/shared.module";
 import { AuthRoutingModule } from './auth-routing.module';
-import { ErrorMsgComponent } from 'src/app/shared/components';
 import { LoginFormComponent, RegistrationFormComponent } from './components';
 
 @NgModule({
   declarations: [
     LoginFormComponent,
-    RegistrationFormComponent,
-    ErrorMsgComponent
+    RegistrationFormComponent
   ],
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    SharedModule
   ]
 })
 export class AuthModule { }

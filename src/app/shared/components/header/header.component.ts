@@ -13,7 +13,7 @@ import { AuthenticationState } from "@core/store/authentication.state";
 })
 export class HeaderComponent {
   @Select(AuthenticationState.userToken)
-  userToken$: Observable<AuthenticationState>;
+  userToken$: Observable<boolean>;
 
   showMenu = false;
 

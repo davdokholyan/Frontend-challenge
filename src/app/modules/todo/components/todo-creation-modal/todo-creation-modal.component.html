@@ -1,0 +1,22 @@
+  <form [formGroup]="todoCreationForm">
+    <div class="mb-4 form-group">
+      <label class="block text-gray-700 text-sm mb-2" for="title">
+        Title
+      </label>
+      <input class="form-control" formControlName="title" id="title" type="text" placeholder="Title">
+      <err-msg class="error-message" [control]="todoCreationForm.controls['title']" [withPatternControlName]="'title'">
+      </err-msg>
+    </div>
+    <div class="mb-6 form-group">
+      <label class="block text-gray-700 text-sm mb-2" for="description">
+        Description
+      </label>
+      <textarea class="form-control" rows="4" formControlName="description" id="description"
+        placeholder="Description"></textarea>
+      <err-msg class="error-message" [control]="todoCreationForm.controls['description']"
+        [withPatternControlName]="'description'">
+      </err-msg>
+      <span
+        class="message-info">{{ (todoCreationForm.get('description').value?.length || 0) + '/' + descriptionMaxLength }}</span>
+    </div>
+  </form>
