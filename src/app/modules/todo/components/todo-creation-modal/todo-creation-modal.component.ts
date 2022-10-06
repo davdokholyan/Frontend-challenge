@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ITodo } from '@shared/interfaces/ITodo';
+import { ITodoForm } from '@shared/interfaces/IForms';
 
 @Component({
   selector: 'app-todo-creation-modal',
@@ -15,9 +16,9 @@ export class TodoCreationModalComponent implements OnInit {
   descriptionMaxLength = 500;
 
   ngOnInit(): void {
-    this.todoCreationForm = new FormGroup({
-      title: new FormControl<string | null>(this.editTodo?.title || null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)]),
-      description: new FormControl<string | null>(this.editTodo?.description || null, [Validators.required, Validators.minLength(2), Validators.maxLength(500)])
+    this.todoCreationForm = new FormGroup<ITodoForm>({
+      title: new FormControl(this.editTodo?.title || null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)]),
+      description: new FormControl(this.editTodo?.description || null, [Validators.required, Validators.minLength(2), Validators.maxLength(500)])
     });
   }
 }

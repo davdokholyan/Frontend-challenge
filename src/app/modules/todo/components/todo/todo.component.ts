@@ -1,14 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Select, Store } from "@ngxs/store";
-import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
-import { TodoCreationModalComponent } from "@modules/todo/components";
-import { ITodo } from '@shared/interfaces/ITodo';
-import { AddTodo, ComplateTodo, EditTodo, RemoveTodo, SortingBy } from '@core/actions/authentication.action';
-import { AuthenticationState } from '@core/store/authentication.state';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { SortType } from '@shared/constants/sortType';
 import { ActivatedRoute } from '@angular/router';
+
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { Select, Store } from "@ngxs/store";
 import { Navigate } from '@ngxs/router-plugin';
+
+import { AuthenticationState } from '@core/store/authentication.state';
+import { AddTodo, CompleteTodo, EditTodo, RemoveTodo, SortingBy } from '@core/actions/authentication.action';
+import { ITodo } from '@shared/interfaces/ITodo';
+import { SortType } from '@shared/constants/sortType';
+import { TodoCreationModalComponent } from "@modules/todo/components";
 
 @Component({
   selector: 'app-todo',
@@ -55,17 +57,18 @@ export class TodoComponent implements OnInit, OnDestroy {
           },
           {
             label: editTodo?.id ? 'Save' : 'Add',
-            type: 'default',
+            type: 'primary',
             disabled: component =>
               component.todoCreationForm.invalid ||
               (component.todoCreationForm.untouched && !component.todoCreationForm.dirty),
             onClick: component => {
               if (component.todoCreationForm.valid) {
                 const todo: ITodo = {
-                  complated: false,
+                  completed: false,
                   date: new Date(),
                   ...component.todoCreationForm.getRawValue()
                 };
+
                 const action = editTodo?.id
                   ? new EditTodo({ todo, id: editTodo.id })
                   : new AddTodo({ todo });
@@ -84,11 +87,25 @@ export class TodoComponent implements OnInit, OnDestroy {
   }
 
   removeTodo(id: string): void {
-    this.store.dispatch(new RemoveTodo({ id }))
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete this todo?',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.store.dispatch(new RemoveTodo({ id })),
+      nzCancelText: 'No'
+    });
   }
 
-  complateTodo(id: string): void {
-    this.store.dispatch(new ComplateTodo({ id }))
+  completeTodo(todo: ITodo): void {
+    if (!todo.completed) {
+    this.modalService.confirm({
+      nzTitle: 'Do you want to complete this todo?',
+      nzOnOk: () => this.store.dispatch(new CompleteTodo({ id: todo.id })),
+      nzOkText: 'Yes',
+      nzCancelText: 'No'
+    });
+    }
   }
 
   sortingBy(sortBy: SortType): void {

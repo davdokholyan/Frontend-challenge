@@ -1,6 +1,6 @@
 import { SortType } from "@shared/constants/sortType";
 import { ITodo } from "@shared/interfaces/ITodo";
-import { IUser } from "../../shared/interfaces/IUser";
+import { IUser } from "@shared/interfaces/IUser";
 
 export class StartLoading {
   static readonly type = '[Auth] StartLoading';
@@ -37,8 +37,8 @@ export class EditTodo {
   constructor(public payload: { todo: ITodo, id: string }) { }
 }
 
-export class ComplateTodo {
-  static readonly type = '[Auth] ComplateTodo';
+export class CompleteTodo {
+  static readonly type = '[Auth] CompleteTodo';
 
   constructor(public payload: { id: string }) { }
 }
@@ -53,10 +53,4 @@ export class SortingBy {
   static readonly type = '[Auth] SortingBy';
 
   constructor(public payload: { sortBy: SortType }) { }
-}
-
-export class SearchTodo {
-  static readonly type = '[Auth] SearchTodo';
-
-  constructor(public payload: { searchText: string }) { }
 }

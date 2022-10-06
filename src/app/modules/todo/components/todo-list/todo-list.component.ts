@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { SortType } from '@shared/constants/sortType';
 import { ITodo } from '@shared/interfaces/ITodo';
 
@@ -21,10 +22,11 @@ export class TodoListComponent {
   removeTodo: EventEmitter<string> = new EventEmitter();
 
   @Output()
-  complateTodo: EventEmitter<string> = new EventEmitter();
+  completeTodo: EventEmitter<ITodo> = new EventEmitter();
 
   @Output()
   sortingBy: EventEmitter<SortType> = new EventEmitter();
 
   sortType = SortType;
+  searchText = '';
 }

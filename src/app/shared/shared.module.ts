@@ -7,7 +7,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
+import { SearchPipe } from '../core/pipes/search.pipe';
 import { ErrorMsgComponent, HeaderComponent, NotFoundComponent } from "@shared/components";
 
 
@@ -21,20 +25,25 @@ import { ErrorMsgComponent, HeaderComponent, NotFoundComponent } from "@shared/c
   declarations: [
     HeaderComponent,
     ErrorMsgComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    SearchPipe
   ],
   exports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
+    SearchPipe,
     HeaderComponent,
     ErrorMsgComponent,
     NotFoundComponent,
     NzButtonModule,
     NzModalModule,
     NzListModule,
-    NzSelectModule
+    NzSelectModule,
+    NzPaginationModule,
+    NzInputModule,
+    NzIconModule
   ]
 })
 export class SharedModule { }

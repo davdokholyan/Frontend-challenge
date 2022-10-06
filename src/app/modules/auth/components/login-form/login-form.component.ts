@@ -10,6 +10,7 @@ import { AuthenticationState } from "@core/store/authentication.state";
 
 import { StatusCode } from "@shared/constants/status-code";
 import { RegexValidator } from '@shared/constants/regex-validators';
+import { ILoginForm } from "@shared/interfaces/IForms";
 
 @Component({
   selector: 'app-login-form',
@@ -20,9 +21,9 @@ export class LoginFormComponent {
   @Select(AuthenticationState.loading)
   loading$: Observable<boolean>;
 
-  loginForm: FormGroup = new FormGroup({
-    email: new FormControl<string | null>(null, [Validators.required, Validators.pattern(RegexValidator.email)]),
-    password: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)])
+  loginForm: FormGroup = new FormGroup<ILoginForm>({
+    email: new FormControl(null, [Validators.required, Validators.pattern(RegexValidator.email)]),
+    password: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(24)])
   });
 
   constructor(

@@ -14,25 +14,27 @@ import { AppComponent } from './app.component';
 
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    SharedModule,
-    NgxsStoragePluginModule.forRoot({
-      key: ['auth.userToken',
-        'auth.authUsers',
-        'auth.user']
-    }),
-    NgxsRouterPluginModule.forRoot(),
-    NgxsModule.forRoot([AuthenticationState], {
-      developmentMode: !environment.production
-    })
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        SharedModule,
+        NgxsStoragePluginModule.forRoot({
+            key: ['auth.userToken',
+                'auth.authUsers',
+                'auth.user']
+        }),
+        NgxsRouterPluginModule.forRoot(),
+        NgxsModule.forRoot([AuthenticationState], {
+            developmentMode: !environment.production
+        })
+    ],
+    providers: [],
+    exports: [
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
