@@ -112,7 +112,6 @@ export class AuthenticationState {
               draft.userToken = payload.user.id;
               draft.user = { todoList: [], ...payload.user };
               draft.authUsers.push(payload.user);
-              this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }))
             })
           );
         }
@@ -158,7 +157,7 @@ export class AuthenticationState {
     return setState(
       produce(getState(), draft => {
         draft.user.todoList.push({ id: Date.now(), ...payload.todo });
-        this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }))
+        this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }));
       })
     );
   }
@@ -175,9 +174,9 @@ export class AuthenticationState {
             item.title = payload.todo.title;
             item.description = payload.todo.description;
             item.date = payload.todo.date;
+            this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }));
           }
         });
-        this.store.dispatch(new AuthenticationActions.SortingBy({ sortBy: draft.sortBy }))
       })
     );
   }
